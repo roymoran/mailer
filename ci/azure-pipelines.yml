@@ -47,7 +47,7 @@ steps:
       command: login
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))  
   
-  - script: docker build --build-arg SERVICE_BUS_CONNECTION_STRING="$(busConnectionString)" --build-arg SERVICE_BUS_QUEUE_NAME="$(queueName)" --build-arg SEND_GRID_API_KEY="$(sendGridKey)" -t roymoran/mailer:build .
+  - script: docker build --build-arg SERVICE_BUS_CONNECTION_STRING="$(busConnectionString)" --build-arg SERVICE_BUS_QUEUE_NAME="$(queueName)" --build-arg SEND_GRID_API_KEY="$(sendGridKey)" -t roymoran/mailer:build -f ci/Dockerfile .
     displayName: 'build docker image'
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     
