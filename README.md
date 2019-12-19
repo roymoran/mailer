@@ -25,8 +25,8 @@ dotnet run --project Mailer
 ###  Deploy
 ```bash
 # Build docker image
-docker build --build-arg SERVICE_BUS_CONNECTION_STRING="provide_your_variable" --build-arg SERVICE_BUS_QUEUE_NAME="provide_your_variable" --build-arg SEND_GRID_API_KEY="provide_your_variable" -t roymoran/pub-mailer:latest -f ci/Dockerfile .
+docker build --build-arg SERVICE_BUS_CONNECTION_STRING="provide_your_variable" --build-arg SERVICE_BUS_QUEUE_NAME="provide_your_variable" --build-arg SEND_GRID_API_KEY="provide_your_variable" -t mailer:latest -f ci/Dockerfile .
 ```
 
-Deploy built docker image to hosting provider of your choice. 
+Deploy built docker image to your hosting provider. 
 
