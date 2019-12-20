@@ -8,9 +8,6 @@ trigger:
     include:
       - master
       - release
-  tags:
-    include:
-      - v*
 
 pool:
   vmImage: 'Ubuntu-16.04'
