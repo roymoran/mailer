@@ -24,14 +24,14 @@ steps:
     inputs:
       contents: '**/*'
       targetFolder: $(Build.ArtifactStagingDirectory)
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),in('refs/tags/v', variables['Build.SourceBranch'])))
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),contains(variables['Build.SourceBranch'], 'refs/tags/v')))
   
   - task: PublishBuildArtifacts@1
     displayName: 'Publish src to: $(Build.ArtifactStagingDirectory)'
     inputs:
       pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
       artifactName: 'deploy' 
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),in('refs/tags/v', variables['Build.SourceBranch'])))
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),contains(variables['Build.SourceBranch'], 'refs/tags/v')))
   
   - script: dotnet restore
     displayName: 'dotnet restore'
@@ -48,12 +48,14 @@ steps:
       containerregistrytype: Container Registry
       dockerRegistryEndpoint: DockerHub
       command: login
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),in('refs/tags/v', variables['Build.SourceBranch'])))
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),contains(variables['Build.SourceBranch'], 'refs/tags/v')))
   
   - script: docker build --build-arg SERVICE_BUS_CONNECTION_STRING="$(busConnectionString)" --build-arg SERVICE_BUS_QUEUE_NAME="$(queueName)" --build-arg SEND_GRID_API_KEY="$(sendGridKey)" -t roymoran/mailer:build -f ci/Dockerfile .
     displayName: 'build docker image'
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),in('refs/tags/v', variables['Build.SourceBranch'])))
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),contains(variables['Build.SourceBranch'], 'refs/tags/v')))
     
   - script: docker push roymoran/mailer:build
     displayName: 'push docker image'
-    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),in('refs/tags/v', variables['Build.SourceBranch'])))
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'),contains(variables['Build.SourceBranch'], 'refs/tags/v')))
+  
+  
