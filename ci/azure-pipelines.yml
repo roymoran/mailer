@@ -7,7 +7,7 @@ trigger:
   branches: 
     include:
       - master
-      - release
+      - refs/tags/v*
 
 pool:
   vmImage: 'Ubuntu-16.04'
