@@ -28,5 +28,5 @@ dotnet run --project Mailer
 docker build --build-arg SERVICE_BUS_CONNECTION_STRING="provide_your_variable" --build-arg SERVICE_BUS_QUEUE_NAME="provide_your_variable" --build-arg SEND_GRID_API_KEY="provide_your_variable" -t mailer:latest -f ci/Dockerfile .
 ```
 
-Deploy built docker image to your hosting provider. 
+Deploy built docker image to your hosting provider or run locally.
 
