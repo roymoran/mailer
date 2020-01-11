@@ -13,7 +13,7 @@ namespace Mailer.MailerImplementation
     // login credentials to an SMTP server. 
     // MailerClient is currently unused in favor of 
     // the SendGrid implementation
-    public class SmtpMailer: IMailer
+    public class SmtpMailer : IMailer
     {
         private static SmtpMailer _instance;
         private readonly IEmailConfiguration _emailConfiguration;
@@ -37,15 +37,15 @@ namespace Mailer.MailerImplementation
 
         public async Task SendMailAsync(EmailMessage emailMessage)
         {
-            var message = new MimeMessage();
+            MimeMessage message = new MimeMessage();
             message.To.AddRange(emailMessage.ToAddresses.Select(x => new MailboxAddress(x.Name, x.Address)));
             message.From.AddRange(emailMessage.FromAddresses.Select(x => new MailboxAddress(x.Name, x.Address)));
-
             message.Subject = emailMessage.Subject;
-            message.Body = new TextPart(TextFormat.Html)
-            {
-                Text = emailMessage.Content.First().Value
-            };
+
+            BodyBuilder builder = new BodyBuilder();
+            builder.HtmlBody = emailMessage.MailContent["text/html"];
+            builder.TextBody = emailMessage.MailContent["text/plain"];
+            message.Body = builder.ToMessageBody();
 
             using (var emailClient = new SmtpClient())
             {
@@ -58,4 +58,4 @@ namespace Mailer.MailerImplementation
 
         }
     }
-} 
+}

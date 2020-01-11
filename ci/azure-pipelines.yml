@@ -16,7 +16,6 @@ variables:
   buildConfiguration: 'Release'
   busConnectionString: $(ServiceBusConnectionString)
   queueName: $(ServiceBusQueueName)
-  sendGridKey: $(SendGridApiKey)
   
 steps:
   - task: CopyFiles@2
@@ -50,7 +49,7 @@ steps:
       command: login
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))  
   
-  - script: docker build --build-arg SERVICE_BUS_CONNECTION_STRING="$(busConnectionString)" --build-arg SERVICE_BUS_QUEUE_NAME="$(queueName)" --build-arg SEND_GRID_API_KEY="$(sendGridKey)" -t roymoran/mailer:build -f ci/Dockerfile .
+  - script: docker build --build-arg SERVICE_BUS_CONNECTION_STRING="$(busConnectionString)" --build-arg SERVICE_BUS_QUEUE_NAME="$(queueName)" -t roymoran/mailer:build -f ci/Dockerfile .
     displayName: 'build docker image'
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))  
     
