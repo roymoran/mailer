@@ -21,7 +21,7 @@ namespace Mailer
         public MessageListener(ILogger<MessageListener> logger)
         {
             _logger = logger;
-            _mailer = new SendGridMailer();
+            _mailer = new SmtpMailer();
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -33,7 +33,8 @@ namespace Mailer
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            return _queueClient.CloseAsync();
+            // return _queueClient.CloseAsync();
+            return Task.CompletedTask;
         }
 
         private void RegisterOnMessageHandlerAndReceiveMessages()
@@ -70,7 +71,7 @@ namespace Mailer
             {
                 // failed to process message, mark as Abandoned
                 _logger.LogError(ex, $"Error processing message: SequenceNumber:{message.SystemProperties.SequenceNumber}");
-                await _queueClient.CompleteAsync(message.SystemProperties.LockToken);
+                await _queueClient.AbandonAsync(message.SystemProperties.LockToken);
             }
         }
 
